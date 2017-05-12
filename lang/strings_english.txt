@@ -2,5 +2,6 @@
 # Copyright (c) MantisBT Team - mantisbt-dev@lists.sourceforge.net
 # Licensed under the MIT license
 
-$s_plugin_SampleAuth_title = 'SampleAuth';
-$s_plugin_SampleAuth_description = 'A plugin that demonstrates how to implement auth plugins.';
+$s_plugin_CertificateAuthentication_Mantis_title = 'Certificate Authentication';
+$s_plugin_CertificateAuthentication_Mantis_description = 'Login to Mantis using Certificate Authentication.';
+

@@ -1,40 +1,38 @@
-# SampleAuth Plugin
+# Certificate Authentication Plugin
 
-This is a sample authentication plugin showing how a MantisBT authentication plugin can implement its own authentication and control authentication related flags on a per user basis.
+This is a certificate authentication plugin which allows you to login to Mantis using your x.509 certificate
 
 The authentication mechanism implemented by this plugin works as follows:
-- If user is administrator, use standard authentication.
 - If user is not registered in the db, user standard behavior.
+- If the email-adress or nickname does not match the user-account from certificate, use standard behaviour.
 - Otherwise, auto-signin the user without a password.
 
-Users that are auto-signed in, can't manage or use passwords that are stored in the MantisBT database.
+Even if users beigng auto-signed in, then can manage or use passwords that are stored in the MantisBT database.
 
-The plugin can be easily modified to redirect to an identity provider and validate the token returned or validate a username and password against a database or LDAP.
+This allows a login to Mantis in case of using another machine or if the certificate expired.
 
-## Authentication Flags
-The authentication flags events enables the plugin to control MantisBT core authentication behavior on a per user basis.
-Plugins can also show their own pages to accept credentials from the user.
+##Usage
 
-- `password_managed_elsewhere_message` message to show in MantisBT UI to indicate that password is managed externally.  If left blank or not set, the default message will be used.
-- `can_use_standard_login` true then standard password form and validation is used, false: otherwise.
-- `login_page` Custom login page to use.
-- `credential_apge` The page to show to ask the user for their credential.
-- `logout_page` Custom logout page to use.
-- `logout_redirect_page` Page to redirect to after user is logged out.
-- `session_lifetime` Default session lifetime in seconds or 0 for browser session.
-- `perm_session_enabled` Flag indicating whether remember me functionality is enabled (ON/OFF).
-- `perm_session_lifetime` Lifetime of session when user selected the remember me option.
-- `reauthentication_enabled` A flag indicating whether reauthentication is enabled (ON/OFF).
-- `reauthentication_expiry` The timeout to require re-authentication.  This is only applicable if `reauthentication_enabled` is set to ON.
+An automatic login using a certificate is not possible. You need to know your username or (if configured) email-adress stored within Mantis database.
 
-If a flag is not returned by the plugin, the default value will be used based on MantisBT core configuration.
+For authentication the first email-adress within DN-field is used.
 
-The plugin will get a user id and username within an associative array.  The flags returned are
-in context of such user.  If user is not in db, then user_id will be 0, but username will be what
-the user typed in the first login page that asks for username.
+To login you simply try to login using your normal username or (if configured) email-adress. If the mantis-account matches the one selected by the client-certificate no password-page will be displayed: You will directly be logged in to Mantis.
 
-If plugin doesn't want to handle a specific user, it should return null.  Otherwise, it should
-return the `AuthFlags` with the overriden settings.
+If the account does not match, you'll get the normal password-page to login using another mantis-account.
+
+##Requirements
+
+You need to enable the use of a client certificate for your webserver (e.g. Apache or Nginx).
+
+Nginx:
+        ssl_verify_client optional;
+        ssl_client_certificate /etc/nginx/certs/cas.pem;
+        fastcgi_param TLS_SUCCESS $ssl_client_verify;
+        fastcgi_param TLS_DN      $ssl_client_s_dn;
+
+Apache:
+        ToDo
 
 ## Screenshots
 
@@ -42,13 +40,10 @@ Native Login Page for Username
 
 ![Login Page](doc/native_login_form_for_username.png "Native Login Page")
 
-Native Credentials Page for Password (skipped for non-administrators)
+Native Credentials Page for Password (skipped for certificate login)
 
 ![Credentials Page](doc/native_credentials_page.png "Native Credentials Page")
 
-User My Account Page
-
-![Profile Page](doc/sample_auth_no_password_change.png "Profile Page")
-
 ## Dependencies
 MantisBT v2.3.0-dev once auth plugin support is added.
+
