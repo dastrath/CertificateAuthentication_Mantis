@@ -26,12 +26,17 @@ If the account does not match, you'll get the normal password-page to login usin
 You need to enable the use of a client certificate for your webserver (e.g. Apache or Nginx).
 
 Nginx:
+
         ssl_verify_client optional;
+
         ssl_client_certificate /etc/nginx/certs/cas.pem;
+
         fastcgi_param TLS_SUCCESS $ssl_client_verify;
+
         fastcgi_param TLS_DN      $ssl_client_s_dn;
 
 Apache:
+
         ToDo
 
 ## Screenshots
