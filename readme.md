@@ -11,7 +11,7 @@ Even if users beigng auto-signed in, then can manage or use passwords that are s
 
 This allows a login to Mantis in case of using another machine or if the certificate expired.
 
-##Usage
+## Usage
 
 An automatic login using a certificate is not possible. You need to know your username or (if configured) email-adress stored within Mantis database.
 
@@ -21,7 +21,7 @@ To login you simply try to login using your normal username or (if configured) e
 
 If the account does not match, you'll get the normal password-page to login using another mantis-account.
 
-##Requirements
+## Requirements
 
 You need to enable the use of a client certificate for your webserver (e.g. Apache or Nginx).
 
